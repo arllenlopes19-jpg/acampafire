@@ -11,6 +11,7 @@ def carregar_pontuacoes():
         with open(ARQUIVO, "r", encoding="utf-8") as f:
             return json.load(f)
     else:
+        # cria o arquivo vazio se não existir
         with open(ARQUIVO, "w", encoding="utf-8") as f:
             json.dump({}, f)
         return {}
@@ -18,10 +19,13 @@ def carregar_pontuacoes():
 @app.route("/")
 def ranking():
     pontuacoes = carregar_pontuacoes()
+
+    # transforma em lista de dicionários para o template
     ranking = [
         {"equipe": nome, "pontos": pontos}
         for nome, pontos in sorted(pontuacoes.items(), key=lambda x: x[1], reverse=True)
     ]
+
     medalhas = ["🥇", "🥈", "🥉"]
     return render_template("ranking.html", ranking=ranking, medalhas=medalhas)
 
