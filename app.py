@@ -1,38 +1,25 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <title>Ranking - Acampamento</title>
-    <style>
-        body { font-family: Arial, sans-serif; background: #f0f8ff; text-align: center; }
-        h1 { color: #4682b4; }
-        table { margin: auto; border-collapse: collapse; width: 60%; }
-        th, td { border: 1px solid #4682b4; padding: 10px; }
-        th { background: #4682b4; color: white; }
-        tr:nth-child(even) { background: #e6f2ff; }
-    </style>
-</head>
-<body>
-    <h1>🏕️ Ranking das Equipes</h1>
-    <table>
-        <tr>
-            <th>Posição</th>
-            <th>Equipe</th>
-            <th>Pontos</th>
-        </tr>
-        {% for item in ranking %}
-        <tr>
-            <td>
-                {% if loop.index <= 3 %}
-                    {{ medalhas[loop.index-1] }}
-                {% else %}
-                    {{ loop.index }}
-                {% endif %}
-            </td>
-            <td>{{ item[0] }}</td>
-            <td>{{ item[1] }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-</body>
-</html>
+from flask import Flask, render_template
+import json, os
+
+app = Flask(__name__)
+
+ARQUIVO = os.path.join("dist", "pontuacoes.json")
+
+def carregar_pontuacoes():
+    if os.path.exists(ARQUIVO):
+        with open(ARQUIVO, "r", encoding="utf-8") as f:
+            return json.load(f)
+    else:
+        with open(ARQUIVO, "w", encoding="utf-8") as f:
+            json.dump({}, f)
+        return {}
+
+@app.route("/")
+def ranking():
+    pontuacoes = carregar_pontuacoes()
+    ranking = sorted(pontuacoes.items(), key=lambda x: x[1], reverse=True)
+    medalhas = ["🥇", "🥈", "🥉"]
+    return render_template("ranking.html", ranking=ranking, medalhas=medalhas)
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
