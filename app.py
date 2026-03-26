@@ -19,8 +19,13 @@ def carregar_pontuacoes():
 @app.route("/")
 def ranking():
     pontuacoes = carregar_pontuacoes()
-    # transforma o dicionário em lista de tuplas e ordena
-    ranking = sorted(pontuacoes.items(), key=lambda x: x[1], reverse=True)
+    
+    # transforma em lista de dicionários para o template
+    ranking = [
+        {"equipe": nome, "pontos": pontos}
+        for nome, pontos in sorted(pontuacoes.items(), key=lambda x: x[1], reverse=True)
+    ]
+    
     medalhas = ["🥇", "🥈", "🥉"]
     return render_template("ranking.html", ranking=ranking, medalhas=medalhas)
 
