@@ -7,13 +7,14 @@ app = Flask(__name__)
 ARQUIVO = os.path.join(os.path.dirname(__file__), "dist", "pontuacoes.json")
 
 def carregar_pontuacoes():
-    if os.path.exists(ARQUIVO):
-        with open(ARQUIVO, "r", encoding="utf-8") as f:
-            return json.load(f)
-    else:
-        # cria o arquivo vazio se não existir
-        with open(ARQUIVO, "w", encoding="utf-8") as f:
-            json.dump({}, f)
+    try:
+        if os.path.exists(ARQUIVO):
+            with open(ARQUIVO, "r", encoding="utf-8") as f:
+                return json.load(f)
+        else:
+            return {}
+    except Exception as e:
+        print("Erro ao carregar pontuações:", e)
         return {}
 
 @app.route("/")
