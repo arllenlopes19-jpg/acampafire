@@ -3,10 +3,11 @@ import json, os
 
 app = Flask(__name__)
 
-# Caminho absoluto para garantir que o Render encontre o arquivo
-ARQUIVO = os.path.join(os.path.dirname(__file__), "dist", "pontuacoes.json")
+# Caminho correto para o arquivo na raiz do projeto
+ARQUIVO = os.path.join(os.path.dirname(__file__), "pontuacoes.json")
 
 def carregar_pontuacoes():
+    # garante que o arquivo existe
     if os.path.exists(ARQUIVO):
         with open(ARQUIVO, "r", encoding="utf-8") as f:
             return json.load(f)
