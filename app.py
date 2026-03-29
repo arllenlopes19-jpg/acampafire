@@ -4,7 +4,6 @@ import sqlite3, os
 app = Flask(__name__)
 DB_PATH = os.path.join(os.path.dirname(__file__), "pontuacoes.db")
 
-# Cria a tabela se não existir
 def inicializar_banco():
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
@@ -17,7 +16,6 @@ def inicializar_banco():
     conn.commit()
     conn.close()
 
-# Carrega os pontos do banco
 def carregar_pontuacoes():
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
@@ -26,7 +24,6 @@ def carregar_pontuacoes():
     conn.close()
     return dados
 
-# Atualiza ou insere pontuação
 def atualizar_pontuacao(equipe, pontos):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
@@ -44,13 +41,14 @@ def ranking():
     medalhas = ["🥇", "🥈", "🥉"]
     return render_template("ranking.html", ranking=ranking, medalhas=medalhas)
 
-# API para receber atualizações automáticas
 @app.route("/api/atualizar", methods=["POST"])
 def atualizar_api():
     dados = request.json
     atualizar_pontuacao(dados["equipe"], dados["pontos"])
     return {"status": "ok", "mensagem": f"Equipe {dados['equipe']} atualizada para {dados['pontos']} pontos"}
 
+# 🔑 garante que o banco seja inicializado sempre que o app subir
+inicializar_banco()
+
 if __name__ == "__main__":
-    inicializar_banco()
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
