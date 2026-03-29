@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <title>Ranking</title>
     <style>
-        body { font-family: Arial; }
-        h1 { color: green; }
-        table { margin: auto; border-collapse: collapse; }
-        th, td { border: 1px solid black; padding: 8px; }
+        body { font-family: Arial, sans-serif; }
+        h1 { color: green; text-align: center; }
+        table { margin: auto; border-collapse: collapse; width: 60%; }
+        th, td { border: 1px solid black; padding: 8px; text-align: center; }
         th { background-color: #f2f2f2; }
         tr:nth-child(even) { background-color: #f9f9f9; }
     </style>
@@ -21,11 +21,17 @@
             <th>Posição</th>
         </tr>
         {% for item in ranking %}
-            <tr>
-                <td>{{ item.pontos }}</td>
-                <td>{{ item.equipe }}</td>
-                <td>{{ loop.index }}</td>
-            </tr>
+        <tr>
+            <td>{{ item["pontos"] }}</td>
+            <td>{{ item["equipe"] }}</td>
+            <td>
+                {% if loop.index <= medalhas|length %}
+                    {{ medalhas[loop.index - 1] }}
+                {% else %}
+                    {{ loop.index }}
+                {% endif %}
+            </td>
+        </tr>
         {% endfor %}
     </table>
 </body>
