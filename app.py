@@ -47,7 +47,16 @@ def atualizar_api():
     atualizar_pontuacao(dados["equipe"], dados["pontos"])
     return {"status": "ok", "mensagem": f"Equipe {dados['equipe']} atualizada para {dados['pontos']} pontos"}
 
-# 🔑 garante que o banco seja inicializado sempre que o app subir
+# rota para inserir dados iniciais
+@app.route("/api/reset", methods=["POST"])
+def reset():
+    atualizar_pontuacao("verde", 80)
+    atualizar_pontuacao("vermelho", 50)
+    atualizar_pontuacao("rosa", 40)
+    atualizar_pontuacao("amarelo", 210)
+    return {"status": "ok", "mensagem": "Pontuações iniciais inseridas"}
+
+# garante que o banco exista sempre
 inicializar_banco()
 
 if __name__ == "__main__":
