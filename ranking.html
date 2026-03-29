@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Ranking de Pontuações</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; }
+        table { margin: 50px auto; border-collapse: collapse; width: 60%; background: #fff; }
+        th, td { padding: 12px; text-align: center; border: 1px solid #ddd; }
+        th { background: #333; color: #fff; }
+        tr:nth-child(even) { background: #f9f9f9; }
+        .medalha { font-size: 20px; }
+    </style>
+</head>
+<body>
+    <h1 style="text-align:center;">Ranking de Equipes</h1>
+    <table>
+        <tr>
+            <th>Posição</th>
+            <th>Equipe</th>
+            <th>Pontos</th>
+        </tr>
+        {% for item in ranking %}
+        <tr>
+            <td>
+                {% if loop.index0 < 3 %}
+                    <span class="medalha">{{ medalhas[loop.index0] }}</span>
+                {% else %}
+                    {{ loop.index }}
+                {% endif %}
+            </td>
+            <td>{{ item.equipe }}</td>
+            <td>{{ item.pontos }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
